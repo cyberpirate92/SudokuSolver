@@ -58,7 +58,7 @@ public class SolverWindow extends JFrame {
 		
 		for(int i=0; i<this.gridSize; i++) {
 			for(int j=0; j<this.gridSize; j++) {
-				this.subGrids[i][j] = new SubGrid(this.gridSize);
+				this.subGrids[i][j] = new SubGrid(i, j, this.gridSize);
 				tempPanel.add(this.subGrids[i][j]);
 			}
 		}
@@ -71,6 +71,7 @@ public class SolverWindow extends JFrame {
 		
 		JButton solveButton, clearButton, evaluateButton;
 		solveButton = new JButton("Solve");
+		solveButton.setFont(Util.getFont());
 		solveButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
@@ -78,6 +79,7 @@ public class SolverWindow extends JFrame {
 		});
 		
 		clearButton = new JButton("Clear");
+		clearButton.setFont(Util.getFont());
 		clearButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
@@ -85,6 +87,7 @@ public class SolverWindow extends JFrame {
 		});
 		
 		evaluateButton = new JButton("Evaluate");
+		evaluateButton.setFont(Util.getFont());
 		evaluateButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				

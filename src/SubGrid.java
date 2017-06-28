@@ -15,9 +15,12 @@ public class SubGrid extends JPanel {
 	private GridLayout gridLayout;
 	private JTextField[][] cells;
 	private GridData data;
+	private int gridRow, gridCol; // denotes the row and column position of this sub-grid
 	
-	public SubGrid(int gridSize) {
+	public SubGrid(int row, int col, int gridSize) {
 		super();
+		this.gridRow = row;
+		this.gridCol = col;
 		this.gridSize = gridSize;
 		this.cells = new JTextField[this.gridSize][this.gridSize];
 		
@@ -29,13 +32,16 @@ public class SubGrid extends JPanel {
 		this.setLayout(this.gridLayout);
 		this.setBorder(BorderFactory.createLineBorder(Color.black)); 
 		
+		Color backgroundColor = Util.getBackgroundColor(gridRow, gridCol);
+		
 		// adding elements to sub grid
 		for(int i=0; i<cells.length; i++) {
 			for(int j=0; j<cells[i].length; j++) {
 				this.cells[i][j] = new JTextField(1);
-				this.cells[i][j].setBorder(BorderFactory.createLineBorder(Color.black));
+				this.cells[i][j].setBorder(BorderFactory.createLineBorder(Util.getBackgroundColor(gridRow+1, gridCol)));
 				this.cells[i][j].setHorizontalAlignment(JTextField.CENTER);
 				this.cells[i][j].setFont(Util.getFont());
+				this.cells[i][j].setBackground(backgroundColor);
 				this.add(cells[i][j]);
 			}
 		}
