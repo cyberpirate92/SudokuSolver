@@ -77,7 +77,13 @@ public class SolverWindow extends JFrame {
 				int status = fileChooser.showOpenDialog(SolverWindow.this);
 				
 				if(status == JFileChooser.APPROVE_OPTION) {
-					SolverWindow.this.setPuzzleDataFile(fileChooser.getSelectedFile());
+					try {
+						SolverWindow.this.setPuzzleDataFile(fileChooser.getSelectedFile());
+					}
+					catch(Exception e) {
+						displayErrorDialog(e.getMessage());
+						e.printStackTrace();
+					}
 				}
 				else {
 					System.out.println("Load cancelled");
@@ -159,14 +165,14 @@ public class SolverWindow extends JFrame {
 		this.getContentPane().add(this.buttonPanel, BorderLayout.SOUTH);
 	}
 	
-	private void setPuzzleDataFile(File file) {
+	private void setPuzzleDataFile(File file) throws Exception {
 		this.puzzleDataFile = file;
 		loadPuzzle();
 	}
 	
 	private int[][] readMatrixFromFile() {
 		
-		int[][] matrix = new int[this.gridSize][this.gridSize];
+		int[][] matrix = new int[this.gridSize*this.gridSize][this.gridSize*this.gridSize];
 		try {
 			
 			int count = this.gridSize*this.gridSize;
@@ -181,7 +187,7 @@ public class SolverWindow extends JFrame {
 					return null;
 				}
 				else {
-					if(lineCount < this.gridSize) {
+					if(lineCount < this.gridSize*this.gridSize) {
 						for(int i=0; i<tokens.length; i++) {
 							matrix[lineCount][i] = Integer.parseInt(tokens[i]);
 						}
@@ -194,8 +200,8 @@ public class SolverWindow extends JFrame {
 				lineCount++;
 			}
 			
-			if(lineCount != this.gridSize) {
-				displayErrorDialog("Puzzle file incomplete, missing " + (this.gridSize - lineCount) + "rows");
+			if(lineCount != this.gridSize*this.gridSize) {
+				displayErrorDialog("Puzzle file incomplete, missing " + (this.gridSize*this.gridSize - lineCount) + "rows");
 				return null;
 			}
 		}
@@ -218,12 +224,25 @@ public class SolverWindow extends JFrame {
 		return matrix;
 	}
 	
-	private void loadPuzzle() {
+	private void loadPuzzle() throws Exception {
 		int[][] puzzleData = readMatrixFromFile();
-		// TODO: Populate sub-grids with this NXN matrix 
+		for(int i=0; i<puzzleData.length; i++) {
+			for(int j=0; j<puzzleData[i].length; j++) {
+				
+				// sub-grid row and column
+				int subGridRow = i/gridSize;
+				int subGridCol = j/gridSize;
+				
+				// row and column within the sub-grid
+				int gridRow = i - (subGridRow * gridSize);
+				int gridCol = j - (subGridCol * gridSize);
+				
+				this.subGrids[subGridRow][subGridCol].setValueAtPosition(gridRow, gridCol, puzzleData[i][j]);
+			}
+		}
 	}
 	
 	private static void displayErrorDialog(String message) {
-		JOptionPane.showMessageDialog(null, "Error", message, JOptionPane.ERROR_MESSAGE);
+		JOptionPane.showMessageDialog(null, message, "Error", JOptionPane.ERROR_MESSAGE);
 	}
 }

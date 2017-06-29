@@ -23,6 +23,7 @@ public class SubGrid extends JPanel {
 		this.gridCol = col;
 		this.gridSize = gridSize;
 		this.cells = new JTextField[this.gridSize][this.gridSize];
+		this.data = new GridData(gridSize);
 		
 		initializeLayout();
 	}
@@ -46,5 +47,19 @@ public class SubGrid extends JPanel {
 			}
 		}
 		this.setVisible(true);
+	}
+	
+	public void setValueAtPosition(int row, int col, int value) throws Exception {
+		this.data.setValueAtPosition(row, col, value);
+		if(data.getValueAtPosition(row, col) != 0)
+			this.cells[row][col].setText(value + "");
+	}
+	
+	public int getValueAtPosition(int row, int col) {
+		return this.data.getValueAtPosition(row, col);
+	}
+	
+	GridData getData() {
+		return this.data;
 	}
 }
