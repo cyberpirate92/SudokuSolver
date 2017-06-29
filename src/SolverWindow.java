@@ -5,9 +5,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 
 import javax.swing.JButton;
@@ -95,12 +97,31 @@ public class SolverWindow extends JFrame {
 		JMenuItem savePuzzleItem = new JMenuItem("Save");
 		savePuzzleItem.setMnemonic(KeyEvent.VK_S);
 		savePuzzleItem.setFont(Util.getFont());
+		savePuzzleItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				final JFileChooser fileChooser = new JFileChooser();
+				int status = fileChooser.showSaveDialog(SolverWindow.this);
+				
+				if(status == JFileChooser.APPROVE_OPTION) {
+					try {
+						if(writeMatrixToFile(fileChooser.getSelectedFile())) {
+							displayInfoDialog("File saved.");
+						} else {
+							displayErrorDialog("File could not be saved.");
+						}
+					}
+					catch(Exception e) {
+						displayErrorDialog(e.getMessage());
+						e.printStackTrace();
+					}
+				}
+				else {
+					System.out.println("Save cancelled");
+				}
+			}
+		});
 		fileMenu.add(savePuzzleItem);
-		
-		JMenuItem saveAsPuzzleItem = new JMenuItem("Save As");
-		saveAsPuzzleItem.setMnemonic(KeyEvent.VK_A);
-		saveAsPuzzleItem.setFont(Util.getFont());
-		fileMenu.add(saveAsPuzzleItem);
 		
 		fileMenu.setFont(Util.getFont());
 		this.menuBar.add(fileMenu);
@@ -234,15 +255,66 @@ public class SolverWindow extends JFrame {
 				int subGridCol = j/gridSize;
 				
 				// row and column within the sub-grid
-				int gridRow = i - (subGridRow * gridSize);
-				int gridCol = j - (subGridCol * gridSize);
+				int gridRow = i%gridSize;
+				int gridCol = j%gridSize;
 				
 				this.subGrids[subGridRow][subGridCol].setValueAtPosition(gridRow, gridCol, puzzleData[i][j]);
 			}
 		}
 	}
 	
+	/*
+	 * Combine all sub-grids to form 
+	 * a single large matrix, basically
+	 * do the reverse of loadPuzzle
+	 */
+	private int[][] getPuzzleMatrix() {
+		int[][] matrix = new int[this.gridSize*this.gridSize][this.gridSize*this.gridSize];
+		for(int i=0; i<matrix.length; i++) {
+			for(int j=0; j<matrix[i].length; j++) {
+				
+				// sub-grid row and column
+				int subGridRow = i/gridSize;
+				int subGridCol = j/gridSize;
+				
+				// row and column within the sub-grid
+				int gridRow = i%gridSize;
+				int gridCol = j%gridSize;
+				
+				matrix[i][j] = this.subGrids[subGridRow][subGridCol].getValueAtPosition(gridRow, gridCol);
+			}
+		}
+		
+		return matrix;
+	}
+	
 	private static void displayErrorDialog(String message) {
 		JOptionPane.showMessageDialog(null, message, "Error", JOptionPane.ERROR_MESSAGE);
+	}
+	
+	private static void displayInfoDialog(String message) {
+		JOptionPane.showMessageDialog(null, message, "", JOptionPane.INFORMATION_MESSAGE);
+	}
+	
+	private boolean writeMatrixToFile(File file) {
+		try {
+			BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+			int[][] matrix = getPuzzleMatrix();
+			for(int i=0; i<matrix.length; i++) {
+				for(int j=0; j<matrix[i].length; j++) {
+					writer.write(matrix[i][j]+"");
+					if(j != matrix[i].length-1)
+						writer.write(",");
+				}
+				writer.write("\r\n");
+			}
+			writer.flush();
+			writer.close();
+			return true;
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 }
