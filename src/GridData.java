@@ -48,4 +48,8 @@ public class GridData {
 			System.out.println("Value '" + value + "' not in range [1-9]");
 		}
 	}
+	
+	public int[][] getMatrix() {
+		return this.data;
+	}
 }
