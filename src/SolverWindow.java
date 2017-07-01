@@ -186,7 +186,7 @@ public class SolverWindow extends JFrame {
 		this.getContentPane().add(this.buttonPanel, BorderLayout.SOUTH);
 	}
 	
-	private void setPuzzleDataFile(File file) throws Exception {
+	private void setPuzzleDataFile(File file) {
 		this.puzzleDataFile = file;
 		loadPuzzle();
 	}
@@ -245,7 +245,7 @@ public class SolverWindow extends JFrame {
 		return matrix;
 	}
 	
-	private void loadPuzzle() throws Exception {
+	private void loadPuzzle() {
 		int[][] puzzleData = readMatrixFromFile();
 		for(int i=0; i<puzzleData.length; i++) {
 			for(int j=0; j<puzzleData[i].length; j++) {

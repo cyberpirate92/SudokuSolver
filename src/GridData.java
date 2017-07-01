@@ -12,7 +12,7 @@ public class GridData {
 	public GridData(int gridSize) {
 		this.gridSize = gridSize;
 		data = new int[this.gridSize][this.gridSize];
-		flag = new boolean[9];
+		flag = new boolean[gridSize];
 	}
 	
 	public int getValueAtPosition(int row, int col) {
@@ -31,13 +31,14 @@ public class GridData {
 		return columnData;
 	}
 	
-	public void setValueAtPosition(int row, int col, int value) throws Exception {
+	public boolean setValueAtPosition(int row, int col, int value) {
 		if(value == 0) { 
 			this.data[row][col] = value;
 		}
-		else if(value >= 1 && value <=9) {
+		else if(value >= 1 && value <=this.gridSize) {
 			if(flag[value-1]) {
-				throw new Exception("Value " + value + " already exists in grid");
+				System.out.println("Value " + value + " already exists in grid");
+				return false;
 			}
 			else {
 				this.data[row][col] = value;
@@ -45,8 +46,10 @@ public class GridData {
 			}
 		}
 		else {
-			System.out.println("Value '" + value + "' not in range [1-9]");
+			System.out.println("Value '" + value + "' not in range [1-"+gridSize+"]");
+			return false;
 		}
+		return true;
 	}
 	
 	public int[][] getMatrix() {
