@@ -1,3 +1,4 @@
+package com.raviteja.sudokusolver;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
@@ -188,10 +189,10 @@ public class SolverWindow extends JFrame {
 	
 	private void setPuzzleDataFile(File file) {
 		this.puzzleDataFile = file;
-		loadPuzzle();
+		loadPuzzle(readMatrixFromFile());
 	}
 	
-	private int[][] readMatrixFromFile() {
+	int[][] readMatrixFromFile() {
 		
 		int[][] matrix = new int[this.gridSize*this.gridSize][this.gridSize*this.gridSize];
 		try {
@@ -245,8 +246,7 @@ public class SolverWindow extends JFrame {
 		return matrix;
 	}
 	
-	private void loadPuzzle() {
-		int[][] puzzleData = readMatrixFromFile();
+	private void loadPuzzle(int[][] puzzleData) {
 		for(int i=0; i<puzzleData.length; i++) {
 			for(int j=0; j<puzzleData[i].length; j++) {
 				
@@ -294,6 +294,42 @@ public class SolverWindow extends JFrame {
 	
 	private static void displayInfoDialog(String message) {
 		JOptionPane.showMessageDialog(null, message, "", JOptionPane.INFORMATION_MESSAGE);
+	}
+	
+	/*
+	 * Fetches the row values for 
+	 * the given row number (0-indexed)
+	 */
+	public int[] getRow(int rowNumber) {
+		int subGridRow = rowNumber/this.gridSize;
+		int[] values = new int[this.gridSize*this.gridSize];
+		int index = 0;
+		
+		// looping through sub-grid columns 
+		for(int subGridCol=0; subGridCol<this.gridSize; subGridCol++) {
+			for(int i=0; i<this.gridSize; i++) {
+				values[index++] = this.subGrids[subGridRow][subGridCol].getValueAtPosition(rowNumber%gridSize, i);
+			}
+		}
+		return values;
+	}
+	
+	/*
+	 * Fetches the column values for 
+	 * the given column number (0-indexed)
+	 */
+	public int[] getColumn(int columnNumber) {
+		int subGridCol = columnNumber/this.gridSize;
+		int[] values = new int[this.gridSize*this.gridSize];
+		int index = 0;
+		
+		// looping through sub-grid rows 
+		for(int subGridRow=0; subGridRow<this.gridSize; subGridRow++) {
+			for(int i=0; i<this.gridSize; i++) {
+				values[index++] = this.subGrids[subGridRow][subGridCol].getValueAtPosition(i, columnNumber%this.gridSize);
+			}
+		}
+		return values;
 	}
 	
 	private boolean writeMatrixToFile(File file) {

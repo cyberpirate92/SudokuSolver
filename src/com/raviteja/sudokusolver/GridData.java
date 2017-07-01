@@ -1,3 +1,4 @@
+package com.raviteja.sudokusolver;
 /** 
  * Data Model for each sub grid
  * @author cyberpirate92 *
