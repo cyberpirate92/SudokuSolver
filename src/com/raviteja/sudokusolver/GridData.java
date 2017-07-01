@@ -13,7 +13,7 @@ public class GridData {
 	public GridData(int gridSize) {
 		this.gridSize = gridSize;
 		data = new int[this.gridSize][this.gridSize];
-		flag = new boolean[gridSize];
+		flag = new boolean[gridSize*gridSize];
 	}
 	
 	public int getValueAtPosition(int row, int col) {
@@ -36,7 +36,7 @@ public class GridData {
 		if(value == 0) { 
 			this.data[row][col] = value;
 		}
-		else if(value >= 1 && value <=this.gridSize) {
+		else if(value >= 1 && value <=this.gridSize*this.gridSize) {
 			if(flag[value-1]) {
 				System.out.println("Value " + value + " already exists in grid");
 				return false;
@@ -47,7 +47,7 @@ public class GridData {
 			}
 		}
 		else {
-			System.out.println("Value '" + value + "' not in range [1-"+gridSize+"]");
+			System.out.println("Value '" + value + "' not in range [1-"+(gridSize*gridSize)+"]");
 			return false;
 		}
 		return true;

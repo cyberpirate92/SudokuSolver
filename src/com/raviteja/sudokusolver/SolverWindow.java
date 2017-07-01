@@ -37,9 +37,13 @@ public class SolverWindow extends JFrame {
 	private JMenuBar menuBar;
 	private File puzzleDataFile;
 	
-	public SolverWindow(String windowTitle, int gridSize) {
+	public SolverWindow(String windowTitle, int gridSize) throws IllegalArgumentException {
 		
 		super(windowTitle);
+		
+		if(gridSize < 2) {
+			throw new IllegalArgumentException("gridSize must be greater than 1");
+		}
 		
 		this.gridSize = gridSize;
 		this.mainPanel = new JPanel();
@@ -64,8 +68,7 @@ public class SolverWindow extends JFrame {
 		
 		this.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setLocationRelativeTo(null);
-		this.setVisible(true);
+		this.setLocationRelativeTo(null); 
 	}
 	
 	private void initMenuBar() {
@@ -246,7 +249,7 @@ public class SolverWindow extends JFrame {
 		return matrix;
 	}
 	
-	private void loadPuzzle(int[][] puzzleData) {
+	public void loadPuzzle(int[][] puzzleData) {
 		for(int i=0; i<puzzleData.length; i++) {
 			for(int j=0; j<puzzleData[i].length; j++) {
 				

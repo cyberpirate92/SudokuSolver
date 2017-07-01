@@ -13,7 +13,8 @@ public class Driver {
 		
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				new SolverWindow(nGrids);
+				SolverWindow window = new SolverWindow(nGrids);
+				window.setVisible(true);
 			}
 		});
 	}
