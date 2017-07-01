@@ -356,4 +356,41 @@ public class SolverWindow extends JFrame {
 			return false;
 		}
 	}
+	
+	/*
+	 * Determines if the array is 
+	 * unique (non zero unique values)
+	 */
+	public static boolean containsNonZeroUniqueValues(int[] values) {
+		if(values == null) {
+			throw new NullPointerException("values cannot be null");
+		}
+		else if(values.length == 0) {
+			return false;
+		}
+		else {
+			for(int i=0; i<values.length; i++) {
+				if(values[i] == 0 || values[i] > values.length) 
+					return false;
+				else {
+					if(values[Math.abs(values[i])-1] > 0)
+						values[Math.abs(values[i])-1] = -values[Math.abs(values[i])-1];
+					else
+						return false;
+				}
+			}
+			return true;
+		}
+	}
+	
+	public boolean isCompletePuzzle() {
+		for(int i=0; i<this.gridSize*this.gridSize; i++) {
+			boolean rowStatus = containsNonZeroUniqueValues(this.getRow(i));
+			boolean colStatus = containsNonZeroUniqueValues(this.getColumn(i));
+			if(!(rowStatus && colStatus)) {
+				return false;
+			}
+		}
+		return true;
+	}
 }
