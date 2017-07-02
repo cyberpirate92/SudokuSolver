@@ -13,6 +13,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -21,6 +22,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JRadioButtonMenuItem;
 
 public class SolverWindow extends JFrame {
 	
@@ -36,6 +38,7 @@ public class SolverWindow extends JFrame {
 	private JPanel mainPanel, buttonPanel;
 	private JMenuBar menuBar;
 	private File puzzleDataFile;
+	private Algorithms chosenAlgorithm;
 	
 	public SolverWindow(String windowTitle, int gridSize) throws IllegalArgumentException {
 		
@@ -51,6 +54,7 @@ public class SolverWindow extends JFrame {
 		this.subGrids = new SubGrid[gridSize][gridSize];
 		this.menuBar = new JMenuBar();
 		this.puzzleDataFile = null;
+		this.chosenAlgorithm = Algorithms.BACKTRACKING;	// default
 		
 		initializeGUI();
 	}
@@ -129,6 +133,21 @@ public class SolverWindow extends JFrame {
 		
 		fileMenu.setFont(Util.getFont());
 		this.menuBar.add(fileMenu);
+		
+		JMenu algorithmMenu = new JMenu("Algorithm");
+		ButtonGroup buttonGroup = new ButtonGroup();
+		JRadioButtonMenuItem backtrackingAlgo = new JRadioButtonMenuItem("Backtracking");
+		buttonGroup.add(backtrackingAlgo);
+		backtrackingAlgo.setSelected(true);
+		backtrackingAlgo.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				SolverWindow.this.chosenAlgorithm = Algorithms.BACKTRACKING;
+			}
+		});
+		algorithmMenu.add(backtrackingAlgo);
+		this.menuBar.add(algorithmMenu);
 	}
 	
 	private void initSudokuGrid() {
@@ -157,7 +176,38 @@ public class SolverWindow extends JFrame {
 		solveButton.setFont(Util.getFont());
 		solveButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				if(chosenAlgorithm != null) {
+					
+					SudokuSolver solver = null;
+					long startTime, endTime;
+					int[][] solvedMatrix;
+					switch(chosenAlgorithm) {
+						case BACKTRACKING:
+							solver = new Backtrack();
+							break;
+					}
+					
+					if(solver != null) {
+						startTime = System.currentTimeMillis();
+						solvedMatrix = solver.solve(getPuzzleMatrix());
+						endTime = System.currentTimeMillis();
+						double elapsedTime = (endTime-startTime)/1000;
+						
+						System.out.println("Time taken: " + elapsedTime);
+						loadPuzzle(solvedMatrix);
+						
+						if(isCompletePuzzle())
+							displayInfoDialog("Solved in " + elapsedTime + " seconds");
+						else
+							displayInfoDialog("Failed to solve puzzle");
+					}
+					else {
+						System.out.println("No Solver chosen: null");
+					}
+				}
+				else {
+					displayErrorDialog("Please choose an algorithm from the menu");
+				}
 			}
 		});
 		
