@@ -1,6 +1,6 @@
 package com.raviteja.sudokusolver;
 
-public class Backtrack implements SudokuSolver {
+public class BruteForceSolver implements SudokuSolver {
 
 	@Override
 	public int[][] solve(int[][] puzzleMatrix) {

@@ -183,7 +183,7 @@ public class SolverWindow extends JFrame {
 					int[][] solvedMatrix;
 					switch(chosenAlgorithm) {
 						case BACKTRACKING:
-							solver = new Backtrack();
+							solver = new BruteForceSolver();
 							break;
 					}
 					

@@ -2,11 +2,11 @@ package com.raviteja.sudokusolver.test;
 
 import static org.junit.Assert.*;
 
-import com.raviteja.sudokusolver.Backtrack;
+import com.raviteja.sudokusolver.BruteForceSolver;
 
 import org.junit.Test;
 
-public class TestBacktrack {
+public class TestBruteForceSolver {
 	
 	static final int[][] size2PuzzleDataInitial = {
 		{0, 0, 4, 2}, 
@@ -49,14 +49,14 @@ public class TestBacktrack {
 	
 	@Test
 	public void testSolveSize2() {
-		Backtrack algorithm = new Backtrack();
+		BruteForceSolver algorithm = new BruteForceSolver();
 		int[][] result = algorithm.solve(size2PuzzleDataInitial);
 		assertArrayEquals(size2PuzzleDataFinal, result);
 	}
 	
 	@Test
 	public void testSolveSize3() {
-		Backtrack algorithm = new Backtrack();
+		BruteForceSolver algorithm = new BruteForceSolver();
 		int[][] result = algorithm.solve(size3PuzzleDataInitial);
 		assertArrayEquals(size3PuzzleDataFinal, result);
 	}
