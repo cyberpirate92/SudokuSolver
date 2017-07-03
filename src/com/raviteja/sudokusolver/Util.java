@@ -14,4 +14,28 @@ public class Util {
 		else
 			return Color.WHITE;
 	}
+	
+	public static void printMatrix(int[][] matrix) {
+		for(int i=0; i<matrix.length; i++) {
+			for(int j=0; j<matrix[i].length; j++) {
+				System.out.print(matrix[i][j] + "\t");
+			}
+			System.out.println();
+		}
+	}
+	
+	public static void printMatrix(int[] matrix) {
+		System.out.print("[");
+		for(int i=0; i<matrix.length; i++)
+			System.out.print(matrix[i] + ",");
+		System.out.print("]\n");
+	}
+	
+	// TODO: Inefficient implementation, try to make it efficient
+	public static boolean contains(int[] values, int value) {
+		for(int x : values) 
+			if(x == value)
+				return true;
+		return false;
+	}
 }

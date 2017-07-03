@@ -264,7 +264,7 @@ public class SolverWindow extends JFrame {
 				else {
 					if(lineCount < this.gridSize*this.gridSize) {
 						for(int i=0; i<tokens.length; i++) {
-							matrix[lineCount][i] = Integer.parseInt(tokens[i]);
+							matrix[lineCount][i] = Integer.parseInt(tokens[i].trim());
 						}
 					}
 					else {
@@ -321,7 +321,7 @@ public class SolverWindow extends JFrame {
 	 * a single large matrix, basically
 	 * do the reverse of loadPuzzle
 	 */
-	private int[][] getPuzzleMatrix() {
+	public int[][] getPuzzleMatrix() {
 		int[][] matrix = new int[this.gridSize*this.gridSize][this.gridSize*this.gridSize];
 		for(int i=0; i<matrix.length; i++) {
 			for(int j=0; j<matrix[i].length; j++) {
@@ -442,5 +442,37 @@ public class SolverWindow extends JFrame {
 			}
 		}
 		return true;
+	}
+	
+	public SubGrid getSubGrid(int row, int col) {
+		return this.subGrids[row][col];
+	}
+	
+	public int getValueAtPosition(int gridRow, int gridCol, int subGridRow, int subGridCol) {
+		return this.subGrids[gridRow][gridCol].getValueAtPosition(subGridRow, subGridCol);
+	}
+	
+	public boolean setValueAtPosition(int gridRow, int gridCol, int subGridRow, int subGridCol, int value) {
+		
+		int[] rowValues = this.getRow(gridRow*this.gridSize+subGridRow); 
+		int[] colValues = this.getColumn(gridCol*this.gridSize+subGridCol);
+		if(Util.contains(rowValues, value) || Util.contains(colValues, value)) {
+			System.out.println("Row/Column already contains value");
+			System.out.println("Row----");
+			Util.printMatrix(rowValues);
+			System.out.println("Col----");
+			Util.printMatrix(colValues);
+			return false;
+		}
+		else {
+			boolean result = this.subGrids[gridRow][gridCol].setValueAtPosition(subGridRow, subGridCol, value);
+			int row = gridRow * this.gridSize + subGridRow;
+			int col = gridCol * this.gridSize + subGridCol;
+			if(result)
+				System.out.println("value set at ("+row+","+col+") = " + value);
+			else
+				System.out.println("unable to set value at ("+row+","+col+") = " + value);
+			return result;
+		}
 	}
 }

@@ -50,10 +50,11 @@ public class SubGrid extends JPanel {
 		this.setVisible(true);
 	}
 	
-	public void setValueAtPosition(int row, int col, int value) {
-		this.data.setValueAtPosition(row, col, value);
+	public boolean setValueAtPosition(int row, int col, int value) {
+		boolean result = this.data.setValueAtPosition(row, col, value);
 		if(data.getValueAtPosition(row, col) != 0)
 			this.cells[row][col].setText(value + "");
+		return result;
 	}
 	
 	public int getValueAtPosition(int row, int col) {
