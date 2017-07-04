@@ -54,7 +54,7 @@ public class SolverWindow extends JFrame {
 		this.subGrids = new SubGrid[gridSize][gridSize];
 		this.menuBar = new JMenuBar();
 		this.puzzleDataFile = null;
-		this.chosenAlgorithm = Algorithms.BACKTRACKING;	// default
+		this.chosenAlgorithm = Algorithms.BRUTEFORCE;	// default
 		
 		initializeGUI();
 	}
@@ -136,15 +136,27 @@ public class SolverWindow extends JFrame {
 		
 		JMenu algorithmMenu = new JMenu("Algorithm");
 		ButtonGroup buttonGroup = new ButtonGroup();
-		JRadioButtonMenuItem backtrackingAlgo = new JRadioButtonMenuItem("Backtracking");
-		buttonGroup.add(backtrackingAlgo);
-		backtrackingAlgo.setSelected(true);
-		backtrackingAlgo.addActionListener(new ActionListener() {
+		JRadioButtonMenuItem bruteForceAlgo = new JRadioButtonMenuItem("Bruteforce");
+		buttonGroup.add(bruteForceAlgo);
+		bruteForceAlgo.setSelected(true);
+		bruteForceAlgo.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				SolverWindow.this.chosenAlgorithm = Algorithms.BACKTRACKING;
+				SolverWindow.this.chosenAlgorithm = Algorithms.BRUTEFORCE;
 			}
+		});
+		algorithmMenu.add(bruteForceAlgo);
+		
+		JRadioButtonMenuItem backtrackingAlgo = new JRadioButtonMenuItem("Backtracking");
+		buttonGroup.add(backtrackingAlgo);
+		backtrackingAlgo.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				SolverWindow.this.chosenAlgorithm = Algorithms.BACKTRACK;
+			}
+			
 		});
 		algorithmMenu.add(backtrackingAlgo);
 		this.menuBar.add(algorithmMenu);
@@ -160,7 +172,7 @@ public class SolverWindow extends JFrame {
 		
 		for(int i=0; i<this.gridSize; i++) {
 			for(int j=0; j<this.gridSize; j++) {
-				this.subGrids[i][j] = new SubGrid(i, j, this.gridSize);
+				this.subGrids[i][j] = new SubGrid(i, j, this.gridSize, this);
 				tempPanel.add(this.subGrids[i][j]);
 			}
 		}
@@ -182,7 +194,7 @@ public class SolverWindow extends JFrame {
 					long startTime, endTime;
 					int[][] solvedMatrix;
 					switch(chosenAlgorithm) {
-						case BACKTRACKING:
+						case BRUTEFORCE:
 							solver = new BruteForceSolver();
 							break;
 					}
@@ -475,4 +487,29 @@ public class SolverWindow extends JFrame {
 			return result;
 		}
 	}
+	
+	public int getGridSize() {
+		return this.gridSize;
+	}
+	
+	public void highlightRow(int row) {
+		for(int i=0; i<this.gridSize; i++)
+			this.subGrids[row][i].highlightRow(row%gridSize);
+	}
+	
+	public void deHighlightRow(int row) {
+		for(int i=0; i<this.gridSize; i++)
+			this.subGrids[row][i].deHighlightRow(row%gridSize);
+	}
+	
+	public void highlightColumn(int col) {
+		for(int i=0; i<this.gridSize; i++)
+			this.subGrids[i][col].highlightColumn(col%gridSize);
+	}
+	
+	public void deHighlightCol(int col) {
+		for(int i=0; i<this.gridSize; i++)
+			this.subGrids[i][col].deHighlightCol(col%gridSize);
+	}
+	
 }
