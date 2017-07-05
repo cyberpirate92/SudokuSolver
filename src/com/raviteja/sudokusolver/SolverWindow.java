@@ -494,22 +494,22 @@ public class SolverWindow extends JFrame {
 	
 	public void highlightRow(int row) {
 		for(int i=0; i<this.gridSize; i++)
-			this.subGrids[row][i].highlightRow(row%gridSize);
+			this.subGrids[row/gridSize][i].highlightRow(row%gridSize);
 	}
 	
 	public void deHighlightRow(int row) {
 		for(int i=0; i<this.gridSize; i++)
-			this.subGrids[row][i].deHighlightRow(row%gridSize);
+			this.subGrids[row/gridSize][i].deHighlightRow(row%gridSize);
 	}
 	
 	public void highlightColumn(int col) {
 		for(int i=0; i<this.gridSize; i++)
-			this.subGrids[i][col].highlightColumn(col%gridSize);
+			this.subGrids[i][col/gridSize].highlightColumn(col%gridSize);
 	}
 	
 	public void deHighlightCol(int col) {
 		for(int i=0; i<this.gridSize; i++)
-			this.subGrids[i][col].deHighlightCol(col%gridSize);
+			this.subGrids[i][col/gridSize].deHighlightCol(col%gridSize);
 	}
 	
 }

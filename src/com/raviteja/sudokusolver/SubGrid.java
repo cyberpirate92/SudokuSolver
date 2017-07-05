@@ -41,24 +41,25 @@ public class SubGrid extends JPanel {
 		// adding elements to sub grid
 		for(int i=0; i<cells.length; i++) {
 			for(int j=0; j<cells[i].length; j++) {
+				final int subGridRow = i, subGridCol = j;
 				this.cells[i][j] = new JTextField(1);
 				this.cells[i][j].setBorder(BorderFactory.createLineBorder(Util.getBackgroundColor(gridRow+1, gridCol)));
 				this.cells[i][j].setHorizontalAlignment(JTextField.CENTER);
 				this.cells[i][j].setFont(Util.getFont());
 				this.cells[i][j].addFocusListener(new FocusListener(){
-
+ 
 					@Override
 					public void focusGained(FocusEvent e) {
 						//SubGrid.this.setBackgroundToAll(Util.getHighlightColor());
-						SubGrid.this.window.highlightRow(gridRow);
-						SubGrid.this.window.highlightColumn(gridCol);
+						SubGrid.this.window.highlightRow(gridRow*gridSize+subGridRow);
+						SubGrid.this.window.highlightColumn(gridCol*gridSize+subGridCol);
 					}
 
 					@Override
 					public void focusLost(FocusEvent e) {
 						//SubGrid.this.setBackgroundToAll(Util.getBackgroundColor(gridRow, gridCol));
-						SubGrid.this.window.deHighlightRow(gridRow);
-						SubGrid.this.window.deHighlightCol(gridCol);
+						SubGrid.this.window.deHighlightRow(gridRow*gridSize+subGridRow);
+						SubGrid.this.window.deHighlightCol(gridCol*gridSize+subGridCol);
 					}
 					
 				});
