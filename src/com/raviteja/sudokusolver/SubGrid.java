@@ -68,6 +68,7 @@ public class SubGrid extends JPanel {
 
 					@Override
 					public void keyTyped(KeyEvent e) {
+						
 					}
 
 					@Override
@@ -120,6 +121,23 @@ public class SubGrid extends JPanel {
 
 					@Override
 					public void keyReleased(KeyEvent e) {
+						String text = ((JTextField)e.getSource()).getText().trim();
+						try {
+							int value = text.length()==0 ? 0 : Integer.parseInt(text);
+							if(value >= 1 && value <= gridSize) {
+								if(SubGrid.this.data.getValueAtPosition(subGridRow, subGridCol) != value) {
+									SubGrid.this.data.setValueAtPosition(subGridRow, subGridCol, value);
+								}
+							}
+							else {
+								SubGrid.this.cells[subGridRow][subGridCol].setText("");
+								SubGrid.this.setValueAtPosition(subGridRow, subGridCol, 0);
+							}
+						}
+						catch(NumberFormatException nfe) {
+							SubGrid.this.cells[subGridRow][subGridCol].setText("");
+							SubGrid.this.data.setValueAtPosition(subGridRow, subGridCol, 0);
+						}
 					}
 					
 				});

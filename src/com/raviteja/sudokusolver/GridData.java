@@ -40,6 +40,9 @@ public class GridData {
 	
 	public boolean setValueAtPosition(int row, int col, int value, boolean isConstant) {
 		if(value == 0) { 
+			if(this.data[row][col] != 0) {
+				this.flag[this.data[row][col]-1] = false;
+			}
 			this.data[row][col] = value;
 		}
 		else if(value >= 1 && value <=this.gridSize*this.gridSize) {
