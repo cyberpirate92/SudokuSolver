@@ -1,8 +1,11 @@
 package com.raviteja.sudokusolver;
 import java.awt.Color;
 import java.awt.GridLayout;
+import java.awt.RenderingHints.Key;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
@@ -50,16 +53,73 @@ public class SubGrid extends JPanel {
  
 					@Override
 					public void focusGained(FocusEvent e) {
-						//SubGrid.this.setBackgroundToAll(Util.getHighlightColor());
 						SubGrid.this.window.highlightRow(gridRow*gridSize+subGridRow);
 						SubGrid.this.window.highlightColumn(gridCol*gridSize+subGridCol);
 					}
 
 					@Override
 					public void focusLost(FocusEvent e) {
-						//SubGrid.this.setBackgroundToAll(Util.getBackgroundColor(gridRow, gridCol));
 						SubGrid.this.window.deHighlightRow(gridRow*gridSize+subGridRow);
 						SubGrid.this.window.deHighlightCol(gridCol*gridSize+subGridCol);
+					}
+					
+				});
+				this.cells[i][j].addKeyListener(new KeyListener(){
+
+					@Override
+					public void keyTyped(KeyEvent e) {
+					}
+
+					@Override
+					public void keyPressed(KeyEvent e) {
+						if(e.getKeyCode() == KeyEvent.VK_LEFT) {
+							if(subGridCol == 0 && gridCol == 0) { 
+								return;
+							}
+							else {
+								if(subGridCol == 0)
+									window.focusCell(gridRow, gridCol-1, subGridRow, gridSize-1);
+								else
+									SubGrid.this.focusCell(subGridRow, subGridCol-1);
+							}
+						}
+						else if(e.getKeyCode() == KeyEvent.VK_RIGHT) {
+							if(subGridCol == gridSize-1 && gridCol == gridSize-1) { 
+								return;
+							}
+							else {
+								if(subGridCol == gridSize-1)
+									window.focusCell(gridRow, gridCol+1, subGridRow, 0);
+								else
+									SubGrid.this.focusCell(subGridRow, subGridCol+1);
+							}
+						}
+						else if(e.getKeyCode() == KeyEvent.VK_DOWN) {
+							if(subGridRow == gridSize-1 && gridRow == gridSize-1) { 
+								return;
+							}
+							else {
+								if(subGridRow == gridSize-1)
+									window.focusCell(gridRow+1, gridCol, 0, subGridCol);
+								else
+									SubGrid.this.focusCell(subGridRow+1, subGridCol);
+							}
+						}
+						else if(e.getKeyCode() == KeyEvent.VK_UP) {
+							if(subGridRow == 0 && gridRow == 0) { 
+								return;
+							}
+							else {
+								if(subGridRow == 0)
+									window.focusCell(gridRow-1, gridCol, gridSize-1, subGridCol);
+								else
+									SubGrid.this.focusCell(subGridRow-1, subGridCol);
+							}
+						}
+					}
+
+					@Override
+					public void keyReleased(KeyEvent e) {
 					}
 					
 				});
@@ -79,9 +139,18 @@ public class SubGrid extends JPanel {
 	}
 	
 	public boolean setValueAtPosition(int row, int col, int value) {
-		boolean result = this.data.setValueAtPosition(row, col, value);
-		if(data.getValueAtPosition(row, col) != 0)
+		return setValueAtPosition(row, col, value, false);
+	}
+	
+	public boolean setValueAtPosition(int row, int col, int value, boolean isConstant) {
+		boolean result = this.data.setValueAtPosition(row, col, value, isConstant);
+		if(data.getValueAtPosition(row, col) != 0) {
 			this.cells[row][col].setText(value + "");
+			if(isConstant) {
+				this.cells[row][col].setForeground(Util.getConstantNumberColor());
+				this.cells[row][col].setEditable(false);
+			}
+		}
 		return result;
 	}
 	
@@ -117,5 +186,9 @@ public class SubGrid extends JPanel {
 	
 	public void deHighlightCol(int col) {
 		setColumnColor(col, Util.getBackgroundColor(gridRow, gridCol));
+	}
+	
+	public void focusCell(int row, int col) {
+		this.cells[row][col].requestFocus();
 	}
 }

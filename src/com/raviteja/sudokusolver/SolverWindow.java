@@ -323,7 +323,7 @@ public class SolverWindow extends JFrame {
 				int gridRow = i%gridSize;
 				int gridCol = j%gridSize;
 				
-				this.subGrids[subGridRow][subGridCol].setValueAtPosition(gridRow, gridCol, puzzleData[i][j]);
+				this.subGrids[subGridRow][subGridCol].setValueAtPosition(gridRow, gridCol, puzzleData[i][j], true);
 			}
 		}
 	}
@@ -512,4 +512,7 @@ public class SolverWindow extends JFrame {
 			this.subGrids[i][col/gridSize].deHighlightCol(col%gridSize);
 	}
 	
+	public void focusCell(int gridRow, int gridCol, int subGridRow, int subGridCol) {
+		this.subGrids[gridRow][gridCol].focusCell(subGridRow, subGridCol); 
+	}
 }

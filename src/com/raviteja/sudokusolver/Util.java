@@ -16,7 +16,7 @@ public class Util {
 	}
 	
 	public static Color getHighlightColor() {
-		return Color.ORANGE;
+		return Color.YELLOW;
 	}
 	
 	public static void printMatrix(int[][] matrix) {
@@ -26,6 +26,10 @@ public class Util {
 			}
 			System.out.println();
 		}
+	}
+	
+	public static Color getConstantNumberColor() {
+		return Color.BLUE;
 	}
 	
 	public static void printMatrix(int[] matrix) {

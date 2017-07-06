@@ -8,12 +8,14 @@ public class GridData {
 	
 	private int gridSize;
 	private int[][] data;
+	private boolean[][] isConstant;
 	private boolean[] flag;
 	
 	public GridData(int gridSize) {
 		this.gridSize = gridSize;
 		data = new int[this.gridSize][this.gridSize];
 		flag = new boolean[gridSize*gridSize];
+		isConstant = new boolean[this.gridSize][this.gridSize];
 	}
 	
 	public int getValueAtPosition(int row, int col) {
@@ -33,6 +35,10 @@ public class GridData {
 	}
 	
 	public boolean setValueAtPosition(int row, int col, int value) {
+		return setValueAtPosition(row, col, value, false);
+	}
+	
+	public boolean setValueAtPosition(int row, int col, int value, boolean isConstant) {
 		if(value == 0) { 
 			this.data[row][col] = value;
 		}
@@ -44,6 +50,7 @@ public class GridData {
 			else {
 				this.data[row][col] = value;
 				this.flag[value-1] = true;
+				this.isConstant[row][col] = isConstant;
 			}
 		}
 		else {
