@@ -66,4 +66,8 @@ public class GridData {
 	public int[][] getMatrix() {
 		return this.data;
 	}
+	
+	public boolean isConstant(int row, int col) {
+		return isConstant[row][col];
+	}
 }

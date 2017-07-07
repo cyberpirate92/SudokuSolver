@@ -80,7 +80,7 @@ public class SolverWindow extends JFrame {
 		
 		JMenuItem loadPuzzleItem = new JMenuItem("Load");
 		loadPuzzleItem.setMnemonic(KeyEvent.VK_L);
-		loadPuzzleItem.setFont(Util.getFont());
+		//loadPuzzleItem.setFont(Util.getFont());
 		loadPuzzleItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 				final JFileChooser fileChooser = new JFileChooser();
@@ -104,7 +104,7 @@ public class SolverWindow extends JFrame {
 		
 		JMenuItem savePuzzleItem = new JMenuItem("Save");
 		savePuzzleItem.setMnemonic(KeyEvent.VK_S);
-		savePuzzleItem.setFont(Util.getFont());
+		//savePuzzleItem.setFont(Util.getFont());
 		savePuzzleItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent event) {
@@ -131,7 +131,7 @@ public class SolverWindow extends JFrame {
 		});
 		fileMenu.add(savePuzzleItem);
 		
-		fileMenu.setFont(Util.getFont());
+		//fileMenu.setFont(Util.getFont());
 		this.menuBar.add(fileMenu);
 		
 		JMenu algorithmMenu = new JMenu("Algorithm");
@@ -185,7 +185,7 @@ public class SolverWindow extends JFrame {
 		
 		JButton solveButton, clearButton, evaluateButton;
 		solveButton = new JButton("Solve");
-		solveButton.setFont(Util.getFont());
+		//solveButton.setFont(Util.getFont());
 		solveButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(chosenAlgorithm != null) {
@@ -224,18 +224,21 @@ public class SolverWindow extends JFrame {
 		});
 		
 		clearButton = new JButton("Clear");
-		clearButton.setFont(Util.getFont());
+		//clearButton.setFont(Util.getFont());
 		clearButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				resetPuzzle();
 			}
 		});
 		
 		evaluateButton = new JButton("Evaluate");
-		evaluateButton.setFont(Util.getFont());
+		//evaluateButton.setFont(Util.getFont());
 		evaluateButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				if(SolverWindow.this.isCompletePuzzle()) 
+					displayInfoDialog("Correct");
+				else
+					displayInfoDialog("Incorrect");
 			}
 		});
 		
@@ -514,5 +517,13 @@ public class SolverWindow extends JFrame {
 	
 	public void focusCell(int gridRow, int gridCol, int subGridRow, int subGridCol) {
 		this.subGrids[gridRow][gridCol].focusCell(subGridRow, subGridCol); 
+	}
+	
+	public void resetPuzzle() {
+		for(int i=0; i<gridSize; i++) {
+			for(int j=0; j<gridSize; j++) {
+				subGrids[i][j].resetSubGrid();
+			}
+		}
 	}
 }

@@ -4,7 +4,7 @@ import java.awt.Font;
 
 public class Util {
 	public static Font getFont() {
-		Font font = new Font("Arial", Font.PLAIN, 15);
+		Font font = new Font("Arial", Font.PLAIN, 20);
 		return font;
 	}
 	

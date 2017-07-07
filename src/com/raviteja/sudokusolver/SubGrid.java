@@ -124,9 +124,15 @@ public class SubGrid extends JPanel {
 						String text = ((JTextField)e.getSource()).getText().trim();
 						try {
 							int value = text.length()==0 ? 0 : Integer.parseInt(text);
-							if(value >= 1 && value <= gridSize) {
+							if(value >= 1 && value <= gridSize*gridSize) {
 								if(SubGrid.this.data.getValueAtPosition(subGridRow, subGridCol) != value) {
-									SubGrid.this.data.setValueAtPosition(subGridRow, subGridCol, value);
+									if(!SubGrid.this.data.setValueAtPosition(subGridRow, subGridCol, value)) {
+										value = data.getValueAtPosition(subGridRow, subGridCol);
+										if(value == 0)
+											((JTextField)e.getSource()).setText("");
+										else
+											((JTextField)e.getSource()).setText(value + "");
+									}
 								}
 							}
 							else {
@@ -162,11 +168,16 @@ public class SubGrid extends JPanel {
 	
 	public boolean setValueAtPosition(int row, int col, int value, boolean isConstant) {
 		boolean result = this.data.setValueAtPosition(row, col, value, isConstant);
-		if(data.getValueAtPosition(row, col) != 0) {
-			this.cells[row][col].setText(value + "");
-			if(isConstant) {
-				this.cells[row][col].setForeground(Util.getConstantNumberColor());
-				this.cells[row][col].setEditable(false);
+		if(result) {
+			if(data.getValueAtPosition(row, col) != 0) {
+				this.cells[row][col].setText(this.data.getValueAtPosition(row, col) + "");
+				if(isConstant) {
+					this.cells[row][col].setForeground(Util.getConstantNumberColor());
+					this.cells[row][col].setEditable(false);
+				}
+			}
+			else {
+				this.cells[row][col].setText("");
 			}
 		}
 		return result;
@@ -208,5 +219,15 @@ public class SubGrid extends JPanel {
 	
 	public void focusCell(int row, int col) {
 		this.cells[row][col].requestFocus();
+	}
+	
+	public void resetSubGrid() {
+		for(int i=0; i<gridSize; i++) {
+			for(int j=0; j<gridSize; j++) {
+				if(!data.isConstant(i, j)) {
+					this.setValueAtPosition(i, j, 0);
+				}
+			}
+		}
 	}
 }
